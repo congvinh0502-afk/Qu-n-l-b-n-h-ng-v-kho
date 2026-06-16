@@ -24,6 +24,7 @@ public class MainController implements Initializable {
     @FXML private StackPane contentArea;
 
     // Menu buttons
+    @FXML private Button btnTongQuan;
     @FXML private Button btnHangHoa;
     @FXML private Button btnKhachHang;
     @FXML private Button btnNhaCungCap;
@@ -44,6 +45,9 @@ public class MainController implements Initializable {
             lblWelcome.setText("Xin chào, " + user.getTenNV() + "! Chọn chức năng từ menu bên trái.");
             applyRoleAccess(user.getVaiTro());
         }
+        // Mặc định hiển thị Dashboard sau đăng nhập
+        setActiveButton(btnTongQuan);
+        loadView("/fxml/dashboard/dashboard.fxml");
     }
 
     /** Ẩn menu không thuộc quyền của vai trò */
@@ -77,7 +81,9 @@ public class MainController implements Initializable {
         Button clicked = (Button) event.getSource();
         setActiveButton(clicked);
 
-        if (clicked == btnHangHoa) {
+        if (clicked == btnTongQuan) {
+            loadView("/fxml/dashboard/dashboard.fxml");
+        } else if (clicked == btnHangHoa) {
             loadView("/fxml/hanghoa/san-pham.fxml");
         } else if (clicked == btnKhachHang) {
             loadView("/fxml/khachhang/khach-hang.fxml");

@@ -25,6 +25,8 @@
     <!-- ===== SIDEBAR ===== -->
     <left>
         <VBox styleClass="sidebar" spacing="2">
+            <Button fx:id="btnTongQuan" text="  Tổng quan" styleClass="menu-btn menu-btn-overview" maxWidth="Infinity" onAction="#onMenu"/>
+
             <Label text="DANH MỤC" styleClass="sidebar-section"/>
             <Button fx:id="btnHangHoa"   text="  Hàng hóa"   styleClass="menu-btn" maxWidth="Infinity" onAction="#onMenu"/>
             <Button fx:id="btnKhachHang" text="  Khách hàng" styleClass="menu-btn" maxWidth="Infinity" onAction="#onMenu"/>
