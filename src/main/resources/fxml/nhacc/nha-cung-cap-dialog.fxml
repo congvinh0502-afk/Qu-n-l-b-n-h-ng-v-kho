@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.nhom6.qlbh.controller.nhacc.NhaCungCapDialogController"
+      styleClass="dialog-root"
+      stylesheets="@/css/style.css"
+      spacing="0" prefWidth="440">
+
+    <Label fx:id="lblTitle" text="Thêm nhà cung cấp" styleClass="dialog-title"/>
+
+    <GridPane styleClass="dialog-form" hgap="12" vgap="10">
+        <padding><Insets top="16" right="20" bottom="8" left="20"/></padding>
+
+        <Label text="Mã NCC *" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+        <TextField fx:id="txtMaNCC" promptText="VD: NCC001" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Tên NCC *" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+        <TextField fx:id="txtTenNCC" promptText="Tên nhà cung cấp" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Điện thoại" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+        <TextField fx:id="txtDienThoai" promptText="0xxxxxxxxx" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Địa chỉ" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
+        <TextField fx:id="txtDiaChi" promptText="Địa chỉ..." GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <columnConstraints>
+            <ColumnConstraints minWidth="90" prefWidth="100"/>
+            <ColumnConstraints hgrow="ALWAYS" prefWidth="280"/>
+        </columnConstraints>
+    </GridPane>
+
+    <Label fx:id="lblError" styleClass="form-error" wrapText="true">
+        <VBox.margin><Insets left="20" right="20"/></VBox.margin>
+    </Label>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <padding><Insets top="12" right="20" bottom="16" left="20"/></padding>
+        <Button text="Hủy" styleClass="btn-cancel" onAction="#onCancel"/>
+        <Button fx:id="btnLuu" text="Lưu" styleClass="btn-primary" onAction="#onLuu" defaultButton="true"/>
+    </HBox>
+</VBox>

@@ -1,0 +1,6 @@
+# Sao chép file này thành db.properties và điền thông tin kết nối MySQL của bạn
+# cp db.properties.example db.properties
+
+db.url=jdbc:mysql://localhost:3306/qlbh?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+db.user=root
+db.password=YOUR_PASSWORD_HERE

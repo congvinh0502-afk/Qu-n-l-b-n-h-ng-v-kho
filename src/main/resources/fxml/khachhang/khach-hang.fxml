@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.nhom6.qlbh.controller.khachhang.KhachHangController"
+      styleClass="module-root"
+      stylesheets="@/css/style.css"
+      spacing="0">
+
+    <HBox styleClass="toolbar" spacing="8" alignment="CENTER_LEFT">
+        <padding><Insets top="10" right="16" bottom="10" left="16"/></padding>
+        <Label text="Tìm kiếm:" styleClass="toolbar-label"/>
+        <TextField fx:id="txtSearch" promptText="Mã KH / Tên / Điện thoại..." prefWidth="260"
+                   styleClass="toolbar-field" onAction="#onSearch"/>
+        <Button text="Tìm" styleClass="btn-search" onAction="#onSearch"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnThem" text="+ Thêm KH" styleClass="btn-primary" onAction="#onThem"/>
+    </HBox>
+
+    <TableView fx:id="tblKhachHang" VBox.vgrow="ALWAYS" styleClass="data-table">
+        <columns>
+            <TableColumn fx:id="colMaKH"        text="Mã KH"        prefWidth="100"/>
+            <TableColumn fx:id="colTenKH"        text="Tên khách hàng" prefWidth="230"/>
+            <TableColumn fx:id="colDienThoai"    text="Điện thoại"   prefWidth="120"/>
+            <TableColumn fx:id="colTongBan"      text="Tổng mua"     prefWidth="130" style="-fx-alignment:CENTER_RIGHT;"/>
+            <TableColumn fx:id="colTongBanTruTra" text="Tổng (trừ trả)" prefWidth="130" style="-fx-alignment:CENTER_RIGHT;"/>
+            <TableColumn fx:id="colAction"       text="Thao tác"     prefWidth="130" style="-fx-alignment:CENTER;"/>
+        </columns>
+        <placeholder><Label text="Không có dữ liệu"/></placeholder>
+    </TableView>
+
+    <HBox styleClass="statusbar" alignment="CENTER_LEFT">
+        <padding><Insets top="6" right="16" bottom="6" left="16"/></padding>
+        <Label fx:id="lblCount" text="0 khách hàng" styleClass="status-label"/>
+    </HBox>
+</VBox>

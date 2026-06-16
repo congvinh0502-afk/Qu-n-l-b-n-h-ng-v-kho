@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.nhom6.qlbh.controller.kho.GiaoDichKhoFormController"
+      fx:id="formRoot"
+      styleClass="module-root"
+      stylesheets="@/css/style.css"
+      spacing="0">
+
+    <!-- Title bar -->
+    <HBox styleClass="form-title-bar" alignment="CENTER_LEFT" spacing="12">
+        <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
+        <Label text="Tạo phiếu giao dịch kho" styleClass="form-page-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="lblMaGD" text="" styleClass="form-ma-gd"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="form-scroll">
+
+        <VBox spacing="12">
+            <padding><Insets top="16" right="20" bottom="16" left="20"/></padding>
+
+            <!-- Info card -->
+            <VBox styleClass="form-card" spacing="10">
+                <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
+                <Label text="Thông tin chung" styleClass="card-title"/>
+                <GridPane hgap="16" vgap="10">
+                    <Label text="Loại GD *" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <ComboBox fx:id="cboLoaiGD" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                              prefWidth="200" onAction="#onLoaiGDChange"/>
+
+                    <HBox fx:id="rowNCC" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                          GridPane.columnSpan="2" spacing="16" alignment="CENTER_LEFT">
+                        <Label text="Nhà CC *" styleClass="form-label" minWidth="90"/>
+                        <ComboBox fx:id="cboNCC" prefWidth="280"/>
+                    </HBox>
+
+                    <Label text="Ghi chú" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <TextField fx:id="txtGhiChu" promptText="Ghi chú (tùy chọn)"
+                               GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="400"/>
+
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="90" prefWidth="100"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+                </GridPane>
+            </VBox>
+
+            <!-- Add product card -->
+            <VBox styleClass="form-card" spacing="10">
+                <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
+                <Label text="Thêm sản phẩm" styleClass="card-title"/>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <TextField fx:id="txtMaSP" promptText="Mã SP" prefWidth="100" onAction="#onTraCuu"/>
+                    <Button text="Tra cứu" styleClass="btn-search" onAction="#onTraCuu"/>
+                    <TextField fx:id="txtTenSP" promptText="Tên sản phẩm" prefWidth="200"
+                               editable="false" styleClass="readonly-field"/>
+                    <Label text="SL:" styleClass="toolbar-label"/>
+                    <TextField fx:id="txtSoLuong" promptText="0" prefWidth="70" onAction="#onThemSP"/>
+                    <Label fx:id="lblDonGiaLabel" text="Đơn giá:" styleClass="toolbar-label"/>
+                    <TextField fx:id="txtDonGia" promptText="0" prefWidth="110" onAction="#onThemSP"/>
+                    <Button text="+ Thêm" styleClass="btn-primary" onAction="#onThemSP"/>
+                </HBox>
+                <Label fx:id="lblAddError" styleClass="form-error"/>
+                <Label fx:id="lblTonKho" text="" styleClass="status-label"/>
+            </VBox>
+
+            <!-- Detail table -->
+            <VBox styleClass="form-card" VBox.vgrow="ALWAYS" spacing="8">
+                <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
+                <Label text="Danh sách sản phẩm" styleClass="card-title"/>
+                <TableView fx:id="tblChiTiet" prefHeight="220" styleClass="data-table">
+                    <columns>
+                        <TableColumn fx:id="ctColMaSP"    text="Mã SP"       prefWidth="90"/>
+                        <TableColumn fx:id="ctColTenSP"   text="Tên SP"      prefWidth="220"/>
+                        <TableColumn fx:id="ctColSoLuong" text="Số lượng"    prefWidth="90"  style="-fx-alignment:CENTER;"/>
+                        <TableColumn fx:id="ctColDonGia"  text="Đơn giá"     prefWidth="120" style="-fx-alignment:CENTER_RIGHT;"/>
+                        <TableColumn fx:id="ctColThanh"   text="Thành tiền"  prefWidth="130" style="-fx-alignment:CENTER_RIGHT;"/>
+                        <TableColumn fx:id="ctColXoa"     text="Xóa"         prefWidth="60"  style="-fx-alignment:CENTER;"/>
+                    </columns>
+                    <placeholder><Label text="Chưa có sản phẩm"/></placeholder>
+                </TableView>
+                <HBox alignment="CENTER_RIGHT">
+                    <Label fx:id="lblTong" text="Tổng: 0 đ" styleClass="total-label"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </ScrollPane>
+
+    <!-- Footer buttons -->
+    <HBox styleClass="form-footer" spacing="10" alignment="CENTER_RIGHT">
+        <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
+        <Button text="← Hủy / Quay lại" styleClass="btn-cancel" onAction="#onHuy"/>
+        <Button fx:id="btnLuu" text="Lưu giao dịch" styleClass="btn-primary" onAction="#onLuu"/>
+    </HBox>
+</VBox>

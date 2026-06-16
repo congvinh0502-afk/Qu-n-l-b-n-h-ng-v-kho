@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.nhom6.qlbh.controller.banhang.TraHangFormController"
+      fx:id="formRoot" styleClass="module-root" stylesheets="@/css/style.css" spacing="0">
+
+    <HBox styleClass="form-title-bar" alignment="CENTER_LEFT" spacing="12">
+        <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
+        <Label text="Tạo phiếu trả hàng" styleClass="form-page-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="lblMaTra" text="" styleClass="form-ma-gd"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="form-scroll">
+        <VBox spacing="12">
+            <padding><Insets top="16" right="20" bottom="16" left="20"/></padding>
+
+            <!-- Invoice ref -->
+            <VBox styleClass="form-card" spacing="10">
+                <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
+                <Label text="Hóa đơn gốc" styleClass="card-title"/>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="Mã HĐ:" styleClass="form-label" minWidth="80"/>
+                    <TextField fx:id="txtMaHD" promptText="HD001..." prefWidth="120" onAction="#onNapHoaDon"/>
+                    <Button text="Nạp HĐ" styleClass="btn-search" onAction="#onNapHoaDon"/>
+                    <Label fx:id="lblHDInfo" text="" styleClass="status-label"/>
+                </HBox>
+            </VBox>
+
+            <!-- Items to return -->
+            <VBox styleClass="form-card" spacing="8">
+                <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
+                <Label text="Sản phẩm trả lại (nhập SL trả = 0 để bỏ qua)" styleClass="card-title"/>
+                <TableView fx:id="tblTraHang" prefHeight="200" styleClass="data-table">
+                    <columns>
+                        <TableColumn fx:id="trColMaSP"   text="Mã SP"     prefWidth="90"/>
+                        <TableColumn fx:id="trColTenSP"  text="Tên SP"    prefWidth="220"/>
+                        <TableColumn fx:id="trColSLGoc"  text="SL gốc"    prefWidth="70" style="-fx-alignment:CENTER;"/>
+                        <TableColumn fx:id="trColSLTra"  text="SL trả"    prefWidth="90" style="-fx-alignment:CENTER;"/>
+                        <TableColumn fx:id="trColDonGia" text="Đơn giá"   prefWidth="120" style="-fx-alignment:CENTER_RIGHT;"/>
+                        <TableColumn fx:id="trColThanh"  text="Thành tiền" prefWidth="130" style="-fx-alignment:CENTER_RIGHT;"/>
+                    </columns>
+                    <placeholder><Label text="Nạp hóa đơn để xem sản phẩm"/></placeholder>
+                </TableView>
+            </VBox>
+
+            <!-- Other info -->
+            <VBox styleClass="form-card" spacing="8">
+                <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
+                <GridPane hgap="12" vgap="10">
+                    <Label text="Cần trả KH:"  GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <Label fx:id="lblCanTra" text="0 đ" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="total-label"/>
+                    <Label text="Đã trả KH:"   GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <TextField fx:id="txtDaTraKhach" text="0" prefWidth="160" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                    <Label text="Lý do:"        GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <TextField fx:id="txtLyDo" promptText="Lý do trả hàng..." GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="100" prefWidth="110"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+                </GridPane>
+            </VBox>
+        </VBox>
+    </ScrollPane>
+
+    <HBox styleClass="form-footer" spacing="10" alignment="CENTER_RIGHT">
+        <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
+        <Button text="← Hủy" styleClass="btn-cancel" onAction="#onHuy"/>
+        <Button fx:id="btnLuu" text="Lưu phiếu trả" styleClass="btn-primary" onAction="#onLuu"/>
+    </HBox>
+</VBox>

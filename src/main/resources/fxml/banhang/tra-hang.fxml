@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.nhom6.qlbh.controller.banhang.TraHangController"
+      styleClass="module-root" stylesheets="@/css/style.css" spacing="0">
+
+    <HBox styleClass="toolbar" spacing="8" alignment="CENTER_LEFT">
+        <padding><Insets top="10" right="16" bottom="10" left="16"/></padding>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="+ Tạo phiếu trả" styleClass="btn-primary" onAction="#onTaoPhieu"/>
+    </HBox>
+
+    <TableView fx:id="tblTH" VBox.vgrow="ALWAYS" styleClass="data-table">
+        <columns>
+            <TableColumn fx:id="colMaTra"    text="Mã phiếu"  prefWidth="90"/>
+            <TableColumn fx:id="colMaHD"     text="Mã HĐ"     prefWidth="80"/>
+            <TableColumn fx:id="colKhach"    text="Khách hàng" prefWidth="160"/>
+            <TableColumn fx:id="colNV"       text="NV"         prefWidth="100"/>
+            <TableColumn fx:id="colThoiGian" text="Thời gian"  prefWidth="130"/>
+            <TableColumn fx:id="colCanTra"   text="Cần trả KH" prefWidth="120" style="-fx-alignment:CENTER_RIGHT;"/>
+            <TableColumn fx:id="colDaTra"    text="Đã trả KH"  prefWidth="120" style="-fx-alignment:CENTER_RIGHT;"/>
+            <TableColumn fx:id="colLyDo"     text="Lý do"      prefWidth="160"/>
+            <TableColumn fx:id="colAction"   text="Chi tiết"   prefWidth="80" style="-fx-alignment:CENTER;"/>
+        </columns>
+        <placeholder><Label text="Không có phiếu trả hàng"/></placeholder>
+    </TableView>
+
+    <HBox styleClass="statusbar" alignment="CENTER_LEFT">
+        <padding><Insets top="6" right="16" bottom="6" left="16"/></padding>
+        <Label fx:id="lblCount" text="0 phiếu" styleClass="status-label"/>
+    </HBox>
+</VBox>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.nhom6.qlbh.controller.banOnline.BanOnlineController"
+      styleClass="module-root"
+      stylesheets="@../../css/style.css">
+
+    <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="10">
+        <Label text="Nền tảng:" styleClass="toolbar-label"/>
+        <ComboBox fx:id="cboNenTang" prefWidth="160" promptText="Tất cả"/>
+        <Button text="Tìm" styleClass="btn-search" onAction="#onFilter"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="+ Tạo đơn mô phỏng" styleClass="btn-primary" onAction="#onTaoDon"/>
+    </HBox>
+
+    <TableView fx:id="tblDHO" VBox.vgrow="ALWAYS" styleClass="data-table">
+        <columns>
+            <TableColumn fx:id="colMaDHO"     text="Mã đơn"            prefWidth="110"/>
+            <TableColumn fx:id="colNenTang"   text="Nền tảng"          prefWidth="110"/>
+            <TableColumn fx:id="colThoiGian"  text="Thời gian"         prefWidth="140"/>
+            <TableColumn fx:id="colMaHD"      text="Hóa đơn"           prefWidth="100"/>
+            <TableColumn fx:id="colTrangThai" text="Trạng thái"        prefWidth="110"/>
+            <TableColumn fx:id="colDiaChi"    text="Địa chỉ giao"      prefWidth="200"/>
+            <TableColumn fx:id="colDonVi"     text="Đơn vị VC"         prefWidth="130"/>
+            <TableColumn fx:id="colTrangThaiGiao" text="Trạng thái VC" prefWidth="140"/>
+            <TableColumn fx:id="colAction"    text="Thao tác"          prefWidth="160"/>
+        </columns>
+        <placeholder><Label text="Chưa có đơn hàng online nào"/></placeholder>
+    </TableView>
+
+    <HBox styleClass="statusbar">
+        <Label fx:id="lblCount" styleClass="status-label" text="0 đơn hàng"/>
+    </HBox>
+
+</VBox>

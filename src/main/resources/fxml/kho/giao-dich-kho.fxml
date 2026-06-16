@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.nhom6.qlbh.controller.kho.GiaoDichKhoController"
+      styleClass="module-root"
+      stylesheets="@/css/style.css"
+      spacing="0">
+
+    <HBox styleClass="toolbar" spacing="8" alignment="CENTER_LEFT">
+        <padding><Insets top="10" right="16" bottom="10" left="16"/></padding>
+        <Label text="Loại GD:" styleClass="toolbar-label"/>
+        <ComboBox fx:id="cboLoaiFilter" prefWidth="160" styleClass="toolbar-field"/>
+        <Button text="Tìm" styleClass="btn-search" onAction="#onSearch"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="+ Tạo phiếu" styleClass="btn-primary" onAction="#onTaoPhieu"/>
+    </HBox>
+
+    <TableView fx:id="tblGDK" VBox.vgrow="ALWAYS" styleClass="data-table">
+        <columns>
+            <TableColumn fx:id="colMaGD"      text="Mã phiếu"     prefWidth="90"/>
+            <TableColumn fx:id="colLoaiGD"    text="Loại GD"      prefWidth="120"/>
+            <TableColumn fx:id="colNCC"       text="NCC"          prefWidth="150"/>
+            <TableColumn fx:id="colNV"        text="Nhân viên"    prefWidth="120"/>
+            <TableColumn fx:id="colThoiGian"  text="Thời gian"    prefWidth="130"/>
+            <TableColumn fx:id="colSoMH"      text="Số SP"        prefWidth="60" style="-fx-alignment:CENTER;"/>
+            <TableColumn fx:id="colTongTien"  text="Tổng tiền"    prefWidth="120" style="-fx-alignment:CENTER_RIGHT;"/>
+            <TableColumn fx:id="colGhiChu"    text="Ghi chú"      prefWidth="160"/>
+            <TableColumn fx:id="colAction"    text="Chi tiết"     prefWidth="80" style="-fx-alignment:CENTER;"/>
+        </columns>
+        <placeholder><Label text="Không có phiếu giao dịch"/></placeholder>
+    </TableView>
+
+    <HBox styleClass="statusbar" alignment="CENTER_LEFT">
+        <padding><Insets top="6" right="16" bottom="6" left="16"/></padding>
+        <Label fx:id="lblCount" text="0 phiếu" styleClass="status-label"/>
+    </HBox>
+</VBox>

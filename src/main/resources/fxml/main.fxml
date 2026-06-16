@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.nhom6.qlbh.controller.MainController"
+            stylesheets="@/css/style.css"
+            prefWidth="1280" prefHeight="720">
+
+    <!-- ===== HEADER ===== -->
+    <top>
+        <HBox styleClass="header" alignment="CENTER_LEFT" spacing="12">
+            <Label text="QUẢN LÝ BÁN HÀNG &amp; KHO" styleClass="header-title"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <VBox alignment="CENTER_RIGHT" spacing="2">
+                <Label fx:id="lblUserName" styleClass="header-user"/>
+                <Label fx:id="lblUserRole" styleClass="header-role"/>
+            </VBox>
+            <Button text="Đăng xuất" styleClass="btn-logout" onAction="#onLogout"/>
+            <HBox.margin><Insets right="4"/></HBox.margin>
+        </HBox>
+    </top>
+
+    <!-- ===== SIDEBAR ===== -->
+    <left>
+        <VBox styleClass="sidebar" spacing="2">
+            <Label text="DANH MỤC" styleClass="sidebar-section"/>
+            <Button fx:id="btnHangHoa"   text="  Hàng hóa"   styleClass="menu-btn" maxWidth="Infinity" onAction="#onMenu"/>
+            <Button fx:id="btnKhachHang" text="  Khách hàng" styleClass="menu-btn" maxWidth="Infinity" onAction="#onMenu"/>
+            <Button fx:id="btnNhaCungCap" text="  Nhà cung cấp" styleClass="menu-btn" maxWidth="Infinity" onAction="#onMenu"/>
+
+            <Label text="GIAO DỊCH" styleClass="sidebar-section"/>
+            <Button fx:id="btnKho"       text="  Kho"         styleClass="menu-btn" maxWidth="Infinity" onAction="#onMenu"/>
+            <Button fx:id="btnBanHang"   text="  Bán hàng"    styleClass="menu-btn" maxWidth="Infinity" onAction="#onMenu"/>
+            <Button fx:id="btnTraHang"   text="  Trả hàng"    styleClass="menu-btn" maxWidth="Infinity" onAction="#onMenu"/>
+
+            <Label text="BÁO CÁO" styleClass="sidebar-section"/>
+            <Button fx:id="btnPhanTich"  text="  Phân tích"   styleClass="menu-btn" maxWidth="Infinity" onAction="#onMenu"/>
+            <Button fx:id="btnBanOnline" text="  Bán online"  styleClass="menu-btn" maxWidth="Infinity" onAction="#onMenu"/>
+        </VBox>
+    </left>
+
+    <!-- ===== KHU VỰC NỘI DUNG ===== -->
+    <center>
+        <StackPane fx:id="contentArea" styleClass="content-area">
+            <VBox styleClass="welcome-box" alignment="CENTER" spacing="14">
+                <Label text="Chào mừng đến với Quản lý Bán hàng &amp; Kho" styleClass="welcome-title"/>
+                <Label fx:id="lblWelcome" styleClass="welcome-sub"/>
+            </VBox>
+        </StackPane>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.nhom6.qlbh.controller.LoginController"
+           styleClass="login-root"
+           stylesheets="@/css/style.css"
+           prefWidth="900" prefHeight="550">
+
+    <VBox styleClass="login-card" spacing="16" alignment="CENTER">
+
+        <Label text="QUẢN LÝ BÁN HÀNG &amp; KHO" styleClass="login-title" maxWidth="Infinity"/>
+        <Label text="Nhóm 6 — Đăng nhập hệ thống" styleClass="login-subtitle" maxWidth="Infinity"/>
+
+        <Separator prefWidth="300"/>
+
+        <!-- Tên đăng nhập -->
+        <VBox spacing="5">
+            <Label text="Tên đăng nhập" styleClass="login-field-label"/>
+            <TextField fx:id="txtUsername" styleClass="login-field"
+                       promptText="Nhập tên đăng nhập" prefWidth="300"
+                       onAction="#onLogin"/>
+        </VBox>
+
+        <!-- Mật khẩu -->
+        <VBox spacing="5">
+            <Label text="Mật khẩu" styleClass="login-field-label"/>
+            <PasswordField fx:id="txtPassword" styleClass="login-field"
+                           promptText="Nhập mật khẩu" prefWidth="300"
+                           onAction="#onLogin"/>
+        </VBox>
+
+        <!-- Thông báo lỗi -->
+        <Label fx:id="lblError" styleClass="lbl-error" maxWidth="300" wrapText="true"/>
+
+        <!-- Nút đăng nhập -->
+        <Button fx:id="btnLogin" text="ĐĂNG NHẬP" styleClass="btn-login"
+                maxWidth="Infinity" onAction="#onLogin">
+            <VBox.margin><Insets top="6"/></VBox.margin>
+        </Button>
+
+    </VBox>
+
+</StackPane>

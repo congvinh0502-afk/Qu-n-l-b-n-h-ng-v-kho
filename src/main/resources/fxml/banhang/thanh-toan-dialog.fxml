@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.nhom6.qlbh.controller.banhang.ThanhToanDialogController"
+      styleClass="dialog-root" stylesheets="@/css/style.css" spacing="0" prefWidth="400">
+
+    <Label text="Thanh toán hóa đơn" styleClass="dialog-title"/>
+
+    <VBox spacing="8">
+        <padding><Insets top="14" right="20" bottom="8" left="20"/></padding>
+        <Label fx:id="lblInfo" text="" wrapText="true" style="-fx-text-fill:#424242; -fx-font-size:13px;"/>
+        <Separator/>
+    </VBox>
+
+    <GridPane hgap="12" vgap="10">
+        <padding><Insets top="4" right="20" bottom="8" left="20"/></padding>
+        <Label text="Còn phải trả:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+        <Label fx:id="lblConLai" text="0 đ" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="total-label"/>
+
+        <Label text="Số tiền TT *" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+        <TextField fx:id="txtSoTien" GridPane.rowIndex="1" GridPane.columnIndex="1" onKeyReleased="#onSoTienChanged"/>
+
+        <Label text="Hình thức *" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+        <ComboBox fx:id="cboHinhThuc" GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity" onAction="#onHinhThucChanged"/>
+
+        <HBox fx:id="rowTienKhach" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2" spacing="12" alignment="CENTER_LEFT">
+            <Label text="Tiền khách đưa:" styleClass="form-label" minWidth="115"/>
+            <TextField fx:id="txtTienKhach" prefWidth="140" onKeyReleased="#onTienKhachChanged"/>
+            <Label text="Tiền thối:" styleClass="toolbar-label"/>
+            <Label fx:id="lblTienThoi" text="0 đ" style="-fx-font-weight:bold; -fx-text-fill:#1565c0;"/>
+        </HBox>
+
+        <columnConstraints>
+            <ColumnConstraints minWidth="115" prefWidth="125"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+    </GridPane>
+
+    <Label fx:id="lblError" styleClass="form-error" wrapText="true">
+        <VBox.margin><Insets left="20" right="20"/></VBox.margin>
+    </Label>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <padding><Insets top="12" right="20" bottom="16" left="20"/></padding>
+        <Button text="Hủy" styleClass="btn-cancel" onAction="#onCancel"/>
+        <Button fx:id="btnLuu" text="Xác nhận TT" styleClass="btn-primary" onAction="#onLuu" defaultButton="true"/>
+    </HBox>
+</VBox>

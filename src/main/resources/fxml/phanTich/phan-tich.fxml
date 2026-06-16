@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.nhom6.qlbh.controller.phanTich.PhanTichController"
+      styleClass="module-root"
+      stylesheets="@../../css/style.css">
+
+    <!-- Toolbar -->
+    <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="10">
+        <Label text="Khoảng thời gian:" styleClass="toolbar-label"/>
+        <ComboBox fx:id="cboRange" prefWidth="150"/>
+        <Label text="Top sản phẩm theo:" styleClass="toolbar-label"/>
+        <ComboBox fx:id="cboTopBy" prefWidth="150"/>
+        <Button text="Làm mới" styleClass="btn-search" onAction="#onRefresh"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnXuatExcel" text="⬇ Xuất Excel" styleClass="btn-primary" onAction="#onXuatExcel"/>
+    </HBox>
+
+    <!-- KPI Cards Row -->
+    <HBox fx:id="kpiRow" styleClass="kpi-row" spacing="12" alignment="CENTER">
+        <padding><Insets top="12" right="16" bottom="4" left="16"/></padding>
+
+        <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="4">
+            <Label fx:id="lblTongDoanhThu" text="—" styleClass="kpi-value"/>
+            <Label text="Tổng doanh thu" styleClass="kpi-label"/>
+        </VBox>
+
+        <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="4">
+            <Label fx:id="lblTongLoiNhuan" text="—" styleClass="kpi-value kpi-profit"/>
+            <Label text="Lợi nhuận gộp" styleClass="kpi-label"/>
+        </VBox>
+
+        <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="4">
+            <Label fx:id="lblSoHoaDon" text="—" styleClass="kpi-value kpi-blue"/>
+            <Label text="Tổng hóa đơn" styleClass="kpi-label"/>
+        </VBox>
+
+        <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="4">
+            <Label fx:id="lblSoSanPham" text="—" styleClass="kpi-value kpi-orange"/>
+            <Label text="SP còn hàng" styleClass="kpi-label"/>
+        </VBox>
+    </HBox>
+
+    <!-- Charts Row -->
+    <HBox spacing="12" VBox.vgrow="ALWAYS">
+        <padding><Insets top="8" right="16" bottom="8" left="16"/></padding>
+
+        <!-- Line Chart: Doanh thu theo ngày -->
+        <VBox styleClass="chart-card" HBox.hgrow="ALWAYS" spacing="4">
+            <Label text="Doanh thu theo ngày" styleClass="chart-title"/>
+            <LineChart fx:id="lineChart" VBox.vgrow="ALWAYS"
+                       animated="false" legendVisible="false"
+                       prefHeight="230">
+                <xAxis><CategoryAxis/></xAxis>
+                <yAxis><NumberAxis/></yAxis>
+            </LineChart>
+        </VBox>
+
+        <!-- Bar Chart: Top sản phẩm -->
+        <VBox styleClass="chart-card" HBox.hgrow="ALWAYS" spacing="4">
+            <Label fx:id="lblBarTitle" text="Top 10 sản phẩm" styleClass="chart-title"/>
+            <BarChart fx:id="barChart" VBox.vgrow="ALWAYS"
+                      animated="false" legendVisible="false"
+                      prefHeight="230">
+                <xAxis><CategoryAxis/></xAxis>
+                <yAxis><NumberAxis/></yAxis>
+            </BarChart>
+        </VBox>
+    </HBox>
+
+    <!-- Product Analysis Table -->
+    <VBox spacing="6" VBox.vgrow="ALWAYS">
+        <padding><Insets top="0" right="16" bottom="12" left="16"/></padding>
+        <Label text="Chi tiết phân tích sản phẩm" styleClass="chart-title"/>
+        <TableView fx:id="tblPhanTich" VBox.vgrow="ALWAYS" styleClass="data-table">
+            <columns>
+                <TableColumn fx:id="colMaSP"      text="Mã SP"             prefWidth="80"/>
+                <TableColumn fx:id="colTenSP"     text="Tên sản phẩm"      prefWidth="220"/>
+                <TableColumn fx:id="colSLBan"     text="SL bán"            prefWidth="75"/>
+                <TableColumn fx:id="colSLTra"     text="SL trả"            prefWidth="75"/>
+                <TableColumn fx:id="colSLThuc"    text="SL thực"           prefWidth="75"/>
+                <TableColumn fx:id="colDoanhThu"  text="Doanh thu"         prefWidth="140"/>
+                <TableColumn fx:id="colLoiNhuan"  text="Lợi nhuận gộp"     prefWidth="140"/>
+            </columns>
+            <placeholder><Label text="Chưa có dữ liệu phân tích"/></placeholder>
+        </TableView>
+    </VBox>
+
+</VBox>
