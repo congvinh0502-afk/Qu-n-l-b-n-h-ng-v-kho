@@ -29,26 +29,18 @@ public class ThanhToanDAO {
         return list;
     }
 
-    /** Insert ThanhToan + update HoaDon.DaThanhToan + TrangThai in one transaction */
+    /**
+     * Ghi một lần thanh toán vào ThanhToan.
+     * Trigger trg_tt_dongbo_hoadon_ins sẽ tự cập nhật DaThanhToan / ConNo / TrangThai trên HoaDon.
+     * KHÔNG cần UPDATE HoaDon thủ công — tránh double-count với trigger.
+     */
     public void insert(String maHD, BigDecimal soTien, String hinhThuc) throws SQLException {
-        String sqlTT = "INSERT INTO ThanhToan (MaHD, SoTien, HinhThuc, ThoiGian) VALUES (?, ?, ?, NOW())";
-        String sqlHD = "UPDATE HoaDon SET DaThanhToan = DaThanhToan + ?, " +
-                       "TrangThai = CASE WHEN DaThanhToan + ? >= TongSauGiamGia THEN 'DA_TT' ELSE 'CHUA_TT' END " +
-                       "WHERE MaHD = ?";
-        try (Connection c = DBConnection.get()) {
-            c.setAutoCommit(false);
-            try {
-                try (PreparedStatement ps = c.prepareStatement(sqlTT)) {
-                    ps.setString(1, maHD); ps.setBigDecimal(2, soTien); ps.setString(3, hinhThuc);
-                    ps.executeUpdate();
-                }
-                try (PreparedStatement ps = c.prepareStatement(sqlHD)) {
-                    ps.setBigDecimal(1, soTien); ps.setBigDecimal(2, soTien); ps.setString(3, maHD);
-                    ps.executeUpdate();
-                }
-                c.commit();
-            } catch (SQLException e) { c.rollback(); throw e; }
-            finally { c.setAutoCommit(true); }
+        String sql = "INSERT INTO ThanhToan (MaHD, SoTien, HinhThuc, ThoiGian) VALUES (?, ?, ?, NOW())";
+        try (Connection c = DBConnection.get(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setString(1, maHD);
+            ps.setBigDecimal(2, soTien);
+            ps.setString(3, hinhThuc);
+            ps.executeUpdate();
         }
     }
 }

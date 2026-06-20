@@ -31,4 +31,9 @@ public class BaoCaoService {
         try { return dao.getKpiTongQuan(); }
         catch (Exception e) { throw new RuntimeException("Lỗi tải KPI: " + e.getMessage(), e); }
     }
+
+    public Map<String, Object> getDashboardHomNay() {
+        try { return dao.getDashboardHomNay(); }
+        catch (Exception e) { throw new RuntimeException("Lỗi tải dashboard: " + e.getMessage(), e); }
+    }
 }

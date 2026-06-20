@@ -46,6 +46,19 @@ public class SanPhamService {
         }
     }
 
+    public void updateMucTon(String maSP, int mucTon) throws Exception {
+        dao.updateMucTon(maSP, mucTon);
+    }
+
+    public List<SanPham> findSapHet() throws Exception {
+        return dao.findSapHet();
+    }
+
+    public int countSapHet() {
+        try { return dao.countSapHet(); }
+        catch (Exception e) { return 0; }
+    }
+
     private void validate(SanPham sp) throws Exception {
         if (sp.getMaSP() == null || sp.getMaSP().isBlank())
             throw new Exception("Mã sản phẩm không được để trống.");

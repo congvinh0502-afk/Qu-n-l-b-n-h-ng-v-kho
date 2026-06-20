@@ -13,6 +13,17 @@
         <HBox styleClass="header" alignment="CENTER_LEFT" spacing="12">
             <Label text="QUẢN LÝ BÁN HÀNG &amp; KHO" styleClass="header-title"/>
             <Pane HBox.hgrow="ALWAYS"/>
+            <!-- Nút chuyển dark/light mode -->
+            <Button fx:id="btnTheme" text="🌙" styleClass="btn-bell" onAction="#onTheme"
+                    minWidth="38" minHeight="32"/>
+            <!-- Chuông cảnh báo tồn kho -->
+            <StackPane alignment="TOP_RIGHT">
+                <Button fx:id="btnBell" text="🔔" styleClass="btn-bell" onAction="#onBell"
+                        minWidth="38" minHeight="32"/>
+                <Label fx:id="lblBellCount" text="0" styleClass="bell-badge"
+                       StackPane.alignment="TOP_RIGHT" visible="false"
+                       translateX="10" translateY="-6"/>
+            </StackPane>
             <VBox alignment="CENTER_RIGHT" spacing="2">
                 <Label fx:id="lblUserName" styleClass="header-user"/>
                 <Label fx:id="lblUserRole" styleClass="header-role"/>
@@ -25,6 +36,8 @@
     <!-- ===== SIDEBAR ===== -->
     <left>
         <VBox styleClass="sidebar" spacing="2">
+            <Button fx:id="btnTongQuan" text="  Tổng quan" styleClass="menu-btn menu-btn-overview" maxWidth="Infinity" onAction="#onMenu"/>
+
             <Label text="DANH MỤC" styleClass="sidebar-section"/>
             <Button fx:id="btnHangHoa"   text="  Hàng hóa"   styleClass="menu-btn" maxWidth="Infinity" onAction="#onMenu"/>
             <Button fx:id="btnKhachHang" text="  Khách hàng" styleClass="menu-btn" maxWidth="Infinity" onAction="#onMenu"/>
@@ -38,6 +51,7 @@
             <Label text="BÁO CÁO" styleClass="sidebar-section"/>
             <Button fx:id="btnPhanTich"  text="  Phân tích"   styleClass="menu-btn" maxWidth="Infinity" onAction="#onMenu"/>
             <Button fx:id="btnBanOnline" text="  Bán online"  styleClass="menu-btn" maxWidth="Infinity" onAction="#onMenu"/>
+            <Button fx:id="btnNhatKy"    text="  Nhật ký"     styleClass="menu-btn" maxWidth="Infinity" onAction="#onMenu"/>
         </VBox>
     </left>
 

@@ -18,6 +18,7 @@
                    styleClass="toolbar-field" onAction="#onSearch"/>
         <Button text="Tìm" styleClass="btn-search" onAction="#onSearch"/>
         <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnXuatExcel" text="⬇ Xuất Excel" styleClass="btn-search" onAction="#onXuatExcel"/>
         <Button fx:id="btnThem" text="+ Thêm KH" styleClass="btn-primary" onAction="#onThem"/>
     </HBox>
 

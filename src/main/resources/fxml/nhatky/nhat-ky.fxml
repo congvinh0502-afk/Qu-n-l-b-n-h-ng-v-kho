@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.nhom6.qlbh.controller.nhatky.NhatKyController"
+      styleClass="module-root"
+      stylesheets="@../../css/style.css"
+      spacing="0">
+
+    <!-- Title bar -->
+    <HBox style="-fx-padding:14 16 10 16;" alignment="CENTER_LEFT" spacing="12">
+        <Label text="NHẬT KÝ HOẠT ĐỘNG" style="-fx-font-size:18px; -fx-font-weight:bold; -fx-text-fill:#1a237e;"/>
+        <Label text="(Chỉ hiển thị 500 bản ghi gần nhất)" style="-fx-font-size:11px; -fx-text-fill:#9e9e9e;"/>
+    </HBox>
+
+    <!-- Toolbar lọc -->
+    <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="10">
+        <padding><Insets top="10" right="16" bottom="10" left="16"/></padding>
+        <Label text="Từ ngày:" styleClass="toolbar-label"/>
+        <DatePicker fx:id="dpFrom" prefWidth="130"/>
+        <Label text="Đến ngày:" styleClass="toolbar-label"/>
+        <DatePicker fx:id="dpTo" prefWidth="130"/>
+        <Label text="Người dùng:" styleClass="toolbar-label"/>
+        <ComboBox fx:id="cboNguoiDung" prefWidth="160" promptText="Tất cả"/>
+        <Button text="Lọc" styleClass="btn-search" onAction="#onFilter"/>
+        <Button text="Xem tất cả" styleClass="btn-cancel" onAction="#onXemTatCa"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <!-- Bảng nhật ký -->
+    <TableView fx:id="tblLog" VBox.vgrow="ALWAYS" styleClass="data-table">
+        <columns>
+            <TableColumn fx:id="colThoiGian"   text="Thời gian"    prefWidth="150"/>
+            <TableColumn fx:id="colNguoiDung"  text="Người dùng"   prefWidth="120"/>
+            <TableColumn fx:id="colBang"       text="Bảng"         prefWidth="100"/>
+            <TableColumn fx:id="colHanhDong"   text="Hành động"    prefWidth="90"  style="-fx-alignment:CENTER;"/>
+            <TableColumn fx:id="colMaBanGhi"   text="Mã bản ghi"   prefWidth="110"/>
+            <TableColumn fx:id="colMoTa"       text="Mô tả"        prefWidth="380"/>
+        </columns>
+        <placeholder><Label text="Không có bản ghi nào. Hãy thực hiện một thao tác thêm/sửa/xóa."/></placeholder>
+    </TableView>
+
+    <!-- Status bar -->
+    <HBox styleClass="statusbar" alignment="CENTER_LEFT">
+        <padding><Insets top="6" right="16" bottom="6" left="16"/></padding>
+        <Label fx:id="lblCount" text="0 bản ghi" styleClass="status-label"/>
+    </HBox>
+
+</VBox>

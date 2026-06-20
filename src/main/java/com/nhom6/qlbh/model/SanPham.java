@@ -11,6 +11,7 @@ public class SanPham {
     private BigDecimal giaBan;
     private int tonKho;
     private int trangThai;    // 1 = Đang KD, 0 = Ngừng KD
+    private int mucTonToiThieu;
 
     public SanPham() {}
 
@@ -30,6 +31,10 @@ public class SanPham {
     public void setTonKho(int tonKho) { this.tonKho = tonKho; }
     public int getTrangThai() { return trangThai; }
     public void setTrangThai(int trangThai) { this.trangThai = trangThai; }
+
+    public int getMucTonToiThieu() { return mucTonToiThieu; }
+    public void setMucTonToiThieu(int mucTonToiThieu) { this.mucTonToiThieu = mucTonToiThieu; }
+    public boolean isSapHet() { return trangThai == 1 && tonKho <= mucTonToiThieu; }
 
     public String getTrangThaiLabel() { return trangThai == 1 ? "Đang KD" : "Ngừng KD"; }
 }

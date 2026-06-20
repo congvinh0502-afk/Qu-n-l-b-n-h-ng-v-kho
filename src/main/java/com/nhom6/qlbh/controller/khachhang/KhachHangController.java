@@ -3,6 +3,7 @@ package com.nhom6.qlbh.controller.khachhang;
 import com.nhom6.qlbh.model.KhachHang;
 import com.nhom6.qlbh.service.KhachHangService;
 import com.nhom6.qlbh.util.AlertUtil;
+import com.nhom6.qlbh.util.ExcelUtil;
 import com.nhom6.qlbh.util.FormatUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -13,15 +14,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class KhachHangController {
 
     @FXML private TextField txtSearch;
+    @FXML private Button btnXuatExcel;
     @FXML private TableView<KhachHang> tblKhachHang;
     @FXML private TableColumn<KhachHang, String> colMaKH;
     @FXML private TableColumn<KhachHang, String> colTenKH;
@@ -77,6 +83,35 @@ public class KhachHangController {
             lblCount.setText(list.size() + " khách hàng");
         } catch (Exception e) {
             AlertUtil.error("Lỗi tìm kiếm", e.getMessage());
+        }
+    }
+
+    @FXML
+    private void onXuatExcel() {
+        List<KhachHang> items = tblKhachHang.getItems();
+        if (items == null || items.isEmpty()) {
+            AlertUtil.warn("Không có dữ liệu", "Bảng hiện tại không có dữ liệu để xuất."); return;
+        }
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Lưu file Excel");
+        fc.setInitialFileName("khach-hang-" + LocalDate.now() + ".xlsx");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel (*.xlsx)", "*.xlsx"));
+        File file = fc.showSaveDialog(btnXuatExcel.getScene().getWindow());
+        if (file == null) return;
+        try {
+            String[] headers = {"Mã KH", "Tên khách hàng", "Điện thoại", "Tổng mua (VNĐ)", "Tổng trừ trả (VNĐ)"};
+            List<String[]> rows = new ArrayList<>();
+            for (KhachHang kh : items) {
+                rows.add(new String[]{
+                    kh.getMaKH(), kh.getTenKH(), kh.getDienThoai(),
+                    FormatUtil.currency(kh.getTongBan()),
+                    FormatUtil.currency(kh.getTongBanTruTra())
+                });
+            }
+            ExcelUtil.exportSheet(headers, rows, "Khách hàng", file);
+            AlertUtil.info("Xuất thành công", "Đã xuất " + items.size() + " khách hàng:\n" + file.getAbsolutePath());
+        } catch (Exception e) {
+            AlertUtil.error("Lỗi xuất Excel", e.getMessage());
         }
     }
 

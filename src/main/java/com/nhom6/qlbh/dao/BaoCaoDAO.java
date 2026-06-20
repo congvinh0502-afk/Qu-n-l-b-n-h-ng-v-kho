@@ -76,6 +76,35 @@ public class BaoCaoDAO {
         return list;
     }
 
+    /** Số liệu Dashboard hôm nay */
+    public Map<String, Object> getDashboardHomNay() throws SQLException {
+        Map<String, Object> m = new HashMap<>();
+        // Doanh thu + số HĐ hôm nay
+        String sqlToday = "SELECT COALESCE(SUM(TongSauGiamGia),0) AS DT, COUNT(*) AS SoHD " +
+                          "FROM HoaDon WHERE DATE(ThoiGian) = CURDATE()";
+        try (Connection conn = DBConnection.get();
+             PreparedStatement ps = conn.prepareStatement(sqlToday);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                m.put("doanhThuHomNay", rs.getBigDecimal("DT"));
+                m.put("soHDHomNay",     rs.getLong("SoHD"));
+            }
+        }
+        // Số hàng sắp hết (view v_hang_sap_het)
+        try (Connection conn = DBConnection.get();
+             PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) AS N FROM v_hang_sap_het");
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) m.put("soHangSapHet", rs.getLong("N"));
+        }
+        // Tổng khách hàng
+        try (Connection conn = DBConnection.get();
+             PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) AS N FROM KhachHang");
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) m.put("soKhachHang", rs.getLong("N"));
+        }
+        return m;
+    }
+
     /** 4 chỉ số KPI tổng hợp */
     public Map<String, Object> getKpiTongQuan() throws SQLException {
         Map<String, Object> kpi = new HashMap<>();
