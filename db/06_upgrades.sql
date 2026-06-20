@@ -84,7 +84,7 @@ AFTER INSERT ON HoaDon
 FOR EACH ROW
 INSERT INTO NhatKyHoatDong(BangTacDong, HanhDong, MaBanGhi, MoTa, NguoiDung)
 VALUES ('HoaDon','THEM', NEW.MaHD,
-        CONCAT('Tao hoa don, tong tien: ', NEW.TongSauGiamGia),
+        CONCAT('Tao hoa don, tong tien: ', REPLACE(FORMAT(NEW.TongSauGiamGia,0),',','.'), ' d'),
         COALESCE(@app_user,'system'));
 
 -- Sửa sản phẩm: CHỈ log khi đổi Tên / Giá / Trạng thái

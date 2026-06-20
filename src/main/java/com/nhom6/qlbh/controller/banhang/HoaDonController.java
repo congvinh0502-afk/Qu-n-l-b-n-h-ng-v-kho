@@ -26,7 +26,7 @@ public class HoaDonController {
     @FXML private ComboBox<String> cboFilter;
     @FXML private TableView<HoaDon> tblHD;
     @FXML private TableColumn<HoaDon, String> colMaHD, colKhachHang, colNhanVien, colThoiGian;
-    @FXML private TableColumn<HoaDon, String> colTongTien, colGiamGia, colSauGiam, colDaTT, colTrangThai;
+    @FXML private TableColumn<HoaDon, String> colTongTien, colGiamGia, colSauGiam, colDaTT, colConNo, colTrangThai;
     @FXML private TableColumn<HoaDon, Void> colAction;
     @FXML private Label lblCount;
 
@@ -35,7 +35,7 @@ public class HoaDonController {
 
     @FXML
     public void initialize() {
-        cboFilter.setItems(FXCollections.observableArrayList("— Tất cả —", "CHUA_TT", "DA_TT"));
+        cboFilter.setItems(FXCollections.observableArrayList("— Tất cả —", "CHUA_TT", "MOT_PHAN", "DA_TT"));
         cboFilter.getSelectionModel().selectFirst();
 
         colMaHD.setCellValueFactory(new PropertyValueFactory<>("maHD"));
@@ -49,28 +49,34 @@ public class HoaDonController {
         colGiamGia.setCellValueFactory(c  -> new SimpleStringProperty(FormatUtil.currency(c.getValue().getGiamGia())));
         colSauGiam.setCellValueFactory(c  -> new SimpleStringProperty(FormatUtil.currency(c.getValue().getTongSauGiamGia())));
         colDaTT.setCellValueFactory(c     -> new SimpleStringProperty(FormatUtil.currency(c.getValue().getDaThanhToan())));
+        colConNo.setCellValueFactory(c    -> new SimpleStringProperty(FormatUtil.currency(c.getValue().getConNo())));
+
         colTrangThai.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getTrangThaiLabel()));
         colTrangThai.setCellFactory(col -> new TableCell<>() {
             @Override protected void updateItem(String v, boolean empty) {
-                super.updateItem(v, empty); if (empty || v == null) { setText(null); setStyle(""); return; }
+                super.updateItem(v, empty);
+                if (empty || v == null) { setText(null); setStyle(""); return; }
                 setText(v);
-                setStyle("Đã TT".equals(v) ? "-fx-text-fill:#16a34a;-fx-font-weight:bold;"
-                                           : "-fx-text-fill:#ea580c;-fx-font-weight:bold;");
+                setStyle(switch (v) {
+                    case "Đã TT"         -> "-fx-text-fill:#16a34a;-fx-font-weight:bold;-fx-alignment:CENTER;";
+                    case "Trả một phần"  -> "-fx-text-fill:#ea580c;-fx-font-weight:bold;-fx-alignment:CENTER;";
+                    default              -> "-fx-text-fill:#c62828;-fx-font-weight:bold;-fx-alignment:CENTER;";
+                });
             }
         });
 
         colAction.setCellFactory(col -> new TableCell<>() {
             private final Button btnTT  = new Button("TT");
             private final Button btnTra = new Button("Trả");
-            private final Button btnXem = new Button("Xem");
-            private final HBox box = new HBox(4, btnTT, btnTra, btnXem);
+            private final Button btnIn  = new Button("In");
+            private final HBox box = new HBox(4, btnTT, btnTra, btnIn);
             {
-                btnTT.getStyleClass().add("btn-primary");   btnTT.setPrefHeight(26);
-                btnTra.getStyleClass().add("btn-edit");     btnTra.setPrefHeight(26);
-                btnXem.getStyleClass().add("btn-search");   btnXem.setPrefHeight(26);
+                btnTT.getStyleClass().add("btn-primary");  btnTT.setPrefHeight(26);
+                btnTra.getStyleClass().add("btn-edit");    btnTra.setPrefHeight(26);
+                btnIn.getStyleClass().add("btn-search");   btnIn.setPrefHeight(26);
                 btnTT.setOnAction(e  -> openThanhToan(getTableView().getItems().get(getIndex())));
                 btnTra.setOnAction(e -> openTraHang(getTableView().getItems().get(getIndex())));
-                btnXem.setOnAction(e -> showDetail(getTableView().getItems().get(getIndex())));
+                btnIn.setOnAction(e  -> openIn(getTableView().getItems().get(getIndex())));
             }
             @Override protected void updateItem(Void v, boolean empty) {
                 super.updateItem(v, empty);
@@ -131,27 +137,18 @@ public class HoaDonController {
         } catch (Exception e) { AlertUtil.error("Lỗi mở form trả hàng", e.getMessage()); }
     }
 
-    private void showDetail(HoaDon hd) {
+    private void openIn(HoaDon hd) {
         try {
-            List<ChiTietHD> ct = service.findChiTiet(hd.getMaHD());
-            StringBuilder sb = new StringBuilder();
-            sb.append("Hóa đơn: ").append(hd.getMaHD()).append("  Khách: ").append(hd.getTenKH()).append("\n\n");
-            for (ChiTietHD c : ct) {
-                sb.append(String.format("%-10s %-30s SL:%3d  Giá: %s%n",
-                    c.getMaSP(), c.getTenSP(), c.getSoLuong(), FormatUtil.currency(c.getDonGia())));
-            }
-            sb.append(String.format("%nTổng: %s đ  |  Giảm: %s đ  |  Sau giảm: %s đ",
-                FormatUtil.currency(hd.getTongTienHang()),
-                FormatUtil.currency(hd.getGiamGia()),
-                FormatUtil.currency(hd.getTongSauGiamGia())));
-            TextArea ta = new TextArea(sb.toString());
-            ta.setEditable(false); ta.setPrefSize(540, 300);
-            ta.setStyle("-fx-font-family:monospace;-fx-font-size:12px;");
+            List<ChiTietHD> chiTiet = service.findChiTiet(hd.getMaHD());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/banhang/hoa-don-in.fxml"));
+            Parent root = loader.load();
+            HoaDonInController ctrl = loader.getController();
+            ctrl.setData(hd, chiTiet);
             Stage stage = new Stage();
-            stage.setTitle("Chi tiết " + hd.getMaHD());
+            stage.setTitle("In hóa đơn – " + hd.getMaHD());
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(ta));
-            stage.setResizable(false);
+            stage.setScene(new Scene(root));
+            stage.setResizable(true);
             stage.show();
         } catch (Exception e) { AlertUtil.error("Lỗi", e.getMessage()); }
     }

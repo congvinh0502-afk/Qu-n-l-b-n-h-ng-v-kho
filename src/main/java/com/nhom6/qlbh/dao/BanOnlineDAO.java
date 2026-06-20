@@ -12,12 +12,29 @@ public class BanOnlineDAO {
 
     public List<NenTangOnline> getNenTangOnlines() throws SQLException {
         List<NenTangOnline> list = new ArrayList<>();
+        String sql = "SELECT MaNT, TenNT, TrangThaiKetNoi, COALESCE(MauSac,'#607d8b') AS MauSac " +
+                     "FROM NenTangOnline ORDER BY MaNT";
         try (Connection conn = DBConnection.get();
-             PreparedStatement ps = conn.prepareStatement("SELECT MaNT, TenNT FROM NenTangOnline ORDER BY MaNT");
+             PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) list.add(new NenTangOnline(rs.getInt("MaNT"), rs.getString("TenNT")));
+            while (rs.next()) {
+                NenTangOnline nt = new NenTangOnline(rs.getInt("MaNT"), rs.getString("TenNT"));
+                nt.setTrangThaiKetNoi(rs.getInt("TrangThaiKetNoi"));
+                nt.setMauSac(rs.getString("MauSac"));
+                list.add(nt);
+            }
         }
         return list;
+    }
+
+    public void toggleKetNoi(int maNT, int newStatus) throws SQLException {
+        try (Connection conn = DBConnection.get();
+             PreparedStatement ps = conn.prepareStatement(
+                 "UPDATE NenTangOnline SET TrangThaiKetNoi = ? WHERE MaNT = ?")) {
+            ps.setInt(1, newStatus);
+            ps.setInt(2, maNT);
+            ps.executeUpdate();
+        }
     }
 
     public List<DonHangOnline> findAll() throws SQLException {

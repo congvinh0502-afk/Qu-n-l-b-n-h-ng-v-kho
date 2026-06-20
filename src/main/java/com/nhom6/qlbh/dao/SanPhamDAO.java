@@ -11,7 +11,7 @@ public class SanPhamDAO {
 
     private static final String BASE_SELECT =
         "SELECT sp.MaSP, sp.TenSP, sp.MaLoai, l.TenLoai, " +
-        "sp.GiaVon, sp.GiaBan, sp.TonKho, sp.TrangThai " +
+        "sp.GiaVon, sp.GiaBan, sp.TonKho, sp.TrangThai, sp.MucTonToiThieu " +
         "FROM SanPham sp LEFT JOIN LoaiSanPham l ON l.MaLoai = sp.MaLoai ";
 
     public List<SanPham> findAll() throws SQLException {
@@ -79,6 +79,27 @@ public class SanPhamDAO {
         }
     }
 
+    public void updateMucTon(String maSP, int mucTon) throws SQLException {
+        String sql = "UPDATE SanPham SET MucTonToiThieu = ? WHERE MaSP = ?";
+        try (Connection c = DBConnection.get(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, mucTon);
+            ps.setString(2, maSP);
+            ps.executeUpdate();
+        }
+    }
+
+    public List<SanPham> findSapHet() throws SQLException {
+        return query(BASE_SELECT +
+            "WHERE sp.TrangThai = 1 AND sp.TonKho <= sp.MucTonToiThieu ORDER BY sp.TonKho", ps -> {});
+    }
+
+    public int countSapHet() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM SanPham WHERE TrangThai = 1 AND TonKho <= MucTonToiThieu";
+        try (Connection c = DBConnection.get(); PreparedStatement ps = c.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) { return rs.next() ? rs.getInt(1) : 0; }
+        }
+    }
+
     // ---- helper ----
     @FunctionalInterface
     interface ParamSetter { void set(PreparedStatement ps) throws SQLException; }
@@ -105,6 +126,7 @@ public class SanPhamDAO {
         sp.setGiaBan(rs.getBigDecimal("GiaBan"));
         sp.setTonKho(rs.getInt("TonKho"));
         sp.setTrangThai(rs.getInt("TrangThai"));
+        sp.setMucTonToiThieu(rs.getInt("MucTonToiThieu"));
         return sp;
     }
 }

@@ -60,6 +60,11 @@ public class BanOnlineService {
         }
     }
 
+    public void toggleKetNoi(int maNT, int newStatus) {
+        try { dao.toggleKetNoi(maNT, newStatus); }
+        catch (Exception e) { throw new RuntimeException("Lỗi cập nhật kết nối: " + e.getMessage(), e); }
+    }
+
     public void capNhatVanChuyen(String maVD, String newStatus) {
         try { dao.updateTrangThaiGiao(maVD, newStatus); }
         catch (Exception e) { throw new RuntimeException("Lỗi cập nhật vận chuyển: " + e.getMessage(), e); }

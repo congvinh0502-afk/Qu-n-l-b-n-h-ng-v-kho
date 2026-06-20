@@ -16,7 +16,8 @@ public class HoaDon {
     private BigDecimal giamGia         = BigDecimal.ZERO;
     private BigDecimal tongSauGiamGia  = BigDecimal.ZERO;
     private BigDecimal daThanhToan     = BigDecimal.ZERO;
-    private String trangThai; // DA_TT | CHUA_TT
+    private BigDecimal conNo           = BigDecimal.ZERO;
+    private String trangThai; // DA_TT | MOT_PHAN | CHUA_TT
     private List<ChiTietHD> chiTiet    = new ArrayList<>();
 
     public String getMaHD()           { return maHD; }
@@ -39,11 +40,21 @@ public class HoaDon {
     public void setTongSauGiamGia(BigDecimal v)   { tongSauGiamGia = v != null ? v : BigDecimal.ZERO; }
     public BigDecimal getDaThanhToan()            { return daThanhToan; }
     public void setDaThanhToan(BigDecimal v)      { daThanhToan = v != null ? v : BigDecimal.ZERO; }
+    public BigDecimal getConNo()                  { return conNo; }
+    public void setConNo(BigDecimal v)            { conNo = v != null ? v : BigDecimal.ZERO; }
     public String getTrangThai()      { return trangThai; }
     public void setTrangThai(String v){ trangThai = v; }
     public List<ChiTietHD> getChiTiet()       { return chiTiet; }
     public void setChiTiet(List<ChiTietHD> v) { chiTiet = v; }
 
-    public BigDecimal getConLai() { return tongSauGiamGia.subtract(daThanhToan); }
-    public String getTrangThaiLabel() { return "DA_TT".equals(trangThai) ? "Đã TT" : "Chưa TT"; }
+    /** Còn nợ — do DB trigger tính, đọc từ cột ConNo */
+    public BigDecimal getConLai() { return conNo; }
+
+    public String getTrangThaiLabel() {
+        return switch (trangThai != null ? trangThai : "") {
+            case "DA_TT"   -> "Đã TT";
+            case "MOT_PHAN" -> "Trả một phần";
+            default        -> "Chưa TT";
+        };
+    }
 }

@@ -1,8 +1,12 @@
 package com.nhom6.qlbh.controller;
 
+import com.nhom6.qlbh.model.SanPham;
 import com.nhom6.qlbh.model.TaiKhoan;
 import com.nhom6.qlbh.model.VaiTro;
 import com.nhom6.qlbh.service.AuthService;
+import com.nhom6.qlbh.service.SanPhamService;
+import com.nhom6.qlbh.util.AlertUtil;
+import com.nhom6.qlbh.util.ThemeManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,6 +18,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -33,8 +38,17 @@ public class MainController implements Initializable {
     @FXML private Button btnTraHang;
     @FXML private Button btnPhanTich;
     @FXML private Button btnBanOnline;
+    @FXML private Button btnNhatKy;
+
+    // Bell notification
+    @FXML private Button btnBell;
+    @FXML private Label  lblBellCount;
+
+    // Theme toggle
+    @FXML private Button btnTheme;
 
     private Button activeBtn;
+    private final SanPhamService spService = new SanPhamService();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -45,14 +59,60 @@ public class MainController implements Initializable {
             lblWelcome.setText("Xin chào, " + user.getTenNV() + "! Chọn chức năng từ menu bên trái.");
             applyRoleAccess(user.getVaiTro());
         }
-        // Mặc định hiển thị Dashboard sau đăng nhập
+        refreshBell();
         setActiveButton(btnTongQuan);
         loadView("/fxml/dashboard/dashboard.fxml");
     }
 
-    /** Ẩn menu không thuộc quyền của vai trò */
+    /** Cập nhật số lượng hàng sắp hết trên chuông */
+    private void refreshBell() {
+        int count = spService.countSapHet();
+        if (count > 0) {
+            lblBellCount.setText(String.valueOf(count));
+            lblBellCount.setVisible(true);
+        } else {
+            lblBellCount.setVisible(false);
+        }
+    }
+
+    @FXML
+    private void onTheme() {
+        ThemeManager.toggle();
+        btnTheme.setText(ThemeManager.isDark() ? "☀" : "🌙");
+        // Áp dụng theme cho cửa sổ chính
+        ThemeManager.applyTo((javafx.scene.Parent) btnTheme.getScene().getRoot());
+        // Áp dụng theme cho view đang hiển thị trong contentArea
+        if (!contentArea.getChildren().isEmpty()) {
+            ThemeManager.applyTo((javafx.scene.Parent) contentArea.getChildren().get(0));
+        }
+    }
+
+    @FXML
+    private void onBell() {
+        try {
+            List<SanPham> list = spService.findSapHet();
+            if (list.isEmpty()) {
+                AlertUtil.info("Không có cảnh báo", "Tất cả hàng hóa đều đủ tồn kho.");
+                return;
+            }
+            StringBuilder sb = new StringBuilder();
+            for (SanPham sp : list) {
+                sb.append(String.format("• %s (%s): Còn %d / Tối thiểu %d\n",
+                    sp.getTenSP(), sp.getMaSP(), sp.getTonKho(), sp.getMucTonToiThieu()));
+            }
+            AlertUtil.warn(
+                "Cảnh báo tồn kho thấp (" + list.size() + " mặt hàng)",
+                sb.toString().trim());
+        } catch (Exception e) {
+            AlertUtil.error("Lỗi tải cảnh báo", e.getMessage());
+        }
+    }
+
     private void applyRoleAccess(VaiTro vaiTro) {
-        if (vaiTro == VaiTro.QUANLY) return; // QUANLY thấy tất cả
+        if (vaiTro == VaiTro.QUANLY) return;
+
+        // Nhật ký chỉ QUANLY thấy — ẩn với tất cả vai trò khác
+        btnNhatKy.setVisible(false); btnNhatKy.setManaged(false);
 
         if (vaiTro == VaiTro.BANHANG) {
             btnKho.setVisible(false);       btnKho.setManaged(false);
@@ -99,22 +159,20 @@ public class MainController implements Initializable {
             loadView("/fxml/phanTich/phan-tich.fxml");
         } else if (clicked == btnBanOnline) {
             loadView("/fxml/banOnline/ban-online.fxml");
+        } else if (clicked == btnNhatKy) {
+            loadView("/fxml/nhatky/nhat-ky.fxml");
         } else {
             showPlaceholder(clicked.getText().trim());
         }
+        refreshBell();
     }
 
     private void setActiveButton(Button btn) {
-        if (activeBtn != null) {
-            activeBtn.getStyleClass().remove("menu-btn-active");
-        }
+        if (activeBtn != null) activeBtn.getStyleClass().remove("menu-btn-active");
         activeBtn = btn;
-        if (!btn.getStyleClass().contains("menu-btn-active")) {
-            btn.getStyleClass().add("menu-btn-active");
-        }
+        if (!btn.getStyleClass().contains("menu-btn-active")) btn.getStyleClass().add("menu-btn-active");
     }
 
-    /** Hiển thị placeholder cho các module chưa làm — sẽ thay bằng FXML thật */
     private void showPlaceholder(String moduleName) {
         Label lbl = new Label("Module: " + moduleName + "\n(Đang phát triển)");
         lbl.setStyle("-fx-font-size:18px; -fx-text-fill:#9e9e9e; -fx-alignment:CENTER;");
@@ -122,10 +180,10 @@ public class MainController implements Initializable {
         contentArea.getChildren().setAll(lbl);
     }
 
-    /** Load một FXML vào khu vực nội dung — dùng ở các giai đoạn sau */
     public void loadView(String fxmlPath) {
         try {
             Parent view = FXMLLoader.load(getClass().getResource(fxmlPath));
+            ThemeManager.applyTo(view);
             contentArea.getChildren().setAll(view);
         } catch (Exception e) {
             e.printStackTrace();

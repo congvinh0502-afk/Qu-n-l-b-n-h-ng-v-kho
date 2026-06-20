@@ -4,6 +4,7 @@ import com.nhom6.qlbh.config.DBConnection;
 import com.nhom6.qlbh.model.ChiTietHD;
 import com.nhom6.qlbh.model.HoaDon;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ public class HoaDonDAO {
 
     private static final String BASE_SELECT =
         "SELECT hd.MaHD, hd.ThoiGian, hd.MaKH, kh.TenKH, hd.MaNV, nv.TenNV, " +
-        "hd.TongTienHang, hd.GiamGia, hd.TongSauGiamGia, hd.DaThanhToan, hd.TrangThai " +
+        "hd.TongTienHang, hd.GiamGia, hd.TongSauGiamGia, hd.DaThanhToan, hd.ConNo, hd.TrangThai " +
         "FROM HoaDon hd " +
         "LEFT JOIN KhachHang kh ON kh.MaKH = hd.MaKH " +
         "LEFT JOIN NhanVien  nv ON nv.MaNV = hd.MaNV ";
@@ -70,9 +71,23 @@ public class HoaDonDAO {
         }
     }
 
+    /** Tạo hóa đơn (không thanh toán ngay) */
     public void insert(HoaDon hd) throws SQLException {
-        String sqlH = "INSERT INTO HoaDon (MaHD, ThoiGian, MaKH, MaNV, TongTienHang, GiamGia, TongSauGiamGia, TrangThai, DaThanhToan) VALUES (?, NOW(), ?, ?, ?, ?, ?, 'CHUA_TT', 0)";
-        String sqlD = "INSERT INTO ChiTietHoaDon (MaHD, MaSP, SoLuong, DonGia, GiaVon) VALUES (?, ?, ?, ?, ?)";
+        insert(hd, BigDecimal.ZERO, null);
+    }
+
+    /**
+     * Tạo hóa đơn + tùy chọn thanh toán ngay trong cùng một transaction.
+     * Trigger trg_hd_tinh_trangthai_ins tự tính ConNo + TrangThai từ DaThanhToan=0.
+     * Sau đó nếu có soTienTrNgay > 0, INSERT ThanhToan → trigger trg_tt_dongbo_hoadon_ins
+     * cập nhật lại DaThanhToan/ConNo/TrangThai của HoaDon tự động.
+     */
+    public void insert(HoaDon hd, BigDecimal soTienTrNgay, String hinhThuc) throws SQLException {
+        String sqlH  = "INSERT INTO HoaDon (MaHD, ThoiGian, MaKH, MaNV, TongTienHang, GiamGia, TongSauGiamGia, DaThanhToan) " +
+                       "VALUES (?, NOW(), ?, ?, ?, ?, ?, 0)";
+        String sqlD  = "INSERT INTO ChiTietHoaDon (MaHD, MaSP, SoLuong, DonGia, GiaVon) VALUES (?, ?, ?, ?, ?)";
+        String sqlTT = "INSERT INTO ThanhToan (MaHD, SoTien, HinhThuc, ThoiGian) VALUES (?, ?, ?, NOW())";
+
         try (Connection c = DBConnection.get()) {
             c.setAutoCommit(false);
             try {
@@ -95,6 +110,14 @@ public class HoaDonDAO {
                     }
                     ps.executeBatch();
                 }
+                if (soTienTrNgay != null && soTienTrNgay.compareTo(BigDecimal.ZERO) > 0) {
+                    try (PreparedStatement ps = c.prepareStatement(sqlTT)) {
+                        ps.setString(1, hd.getMaHD());
+                        ps.setBigDecimal(2, soTienTrNgay);
+                        ps.setString(3, hinhThuc != null ? hinhThuc : "Tiền mặt");
+                        ps.executeUpdate();
+                    }
+                }
                 c.commit();
             } catch (SQLException e) { c.rollback(); throw e; }
             finally { c.setAutoCommit(true); }
@@ -113,6 +136,7 @@ public class HoaDonDAO {
         hd.setGiamGia(rs.getBigDecimal("GiamGia"));
         hd.setTongSauGiamGia(rs.getBigDecimal("TongSauGiamGia"));
         hd.setDaThanhToan(rs.getBigDecimal("DaThanhToan"));
+        hd.setConNo(rs.getBigDecimal("ConNo"));
         hd.setTrangThai(rs.getString("TrangThai"));
         return hd;
     }

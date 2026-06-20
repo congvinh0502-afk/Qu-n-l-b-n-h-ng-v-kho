@@ -20,7 +20,10 @@
         <Label text="Loại:" styleClass="toolbar-label"/>
         <ComboBox fx:id="cboLoai" prefWidth="160" styleClass="toolbar-field"/>
         <Button text="Tìm" styleClass="btn-search" onAction="#onSearch"/>
+        <CheckBox fx:id="chkSapHet" text="Chỉ hiện hàng sắp hết" onAction="#onSearch"
+                  style="-fx-font-size:12px; -fx-text-fill:#c62828;"/>
         <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnXuatExcel" text="⬇ Xuất Excel" styleClass="btn-search" onAction="#onXuatExcel"/>
         <Button fx:id="btnThem" text="+ Thêm SP" styleClass="btn-primary" onAction="#onThem"/>
     </HBox>
 
@@ -32,7 +35,8 @@
             <TableColumn fx:id="colLoai"    text="Loại"      prefWidth="120"/>
             <TableColumn fx:id="colGiaVon"  text="Giá vốn"   prefWidth="110" style="-fx-alignment:CENTER_RIGHT;"/>
             <TableColumn fx:id="colGiaBan"  text="Giá bán"   prefWidth="110" style="-fx-alignment:CENTER_RIGHT;"/>
-            <TableColumn fx:id="colTonKho"  text="Tồn kho"   prefWidth="80"  style="-fx-alignment:CENTER;"/>
+            <TableColumn fx:id="colTonKho"  text="Tồn kho"   prefWidth="75"  style="-fx-alignment:CENTER;"/>
+            <TableColumn fx:id="colMucTon" text="Mức t.thiểu" prefWidth="85" style="-fx-alignment:CENTER;"/>
             <TableColumn fx:id="colTrangThai" text="Trạng thái" prefWidth="100" style="-fx-alignment:CENTER;"/>
             <TableColumn fx:id="colAction"  text="Thao tác"  prefWidth="130" style="-fx-alignment:CENTER;"/>
         </columns>

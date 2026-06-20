@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -34,7 +35,16 @@ public class DBConnection {
     }
 
     public static Connection get() throws SQLException {
-        return ds.getConnection();
+        Connection conn = ds.getConnection();
+        com.nhom6.qlbh.model.TaiKhoan user =
+            com.nhom6.qlbh.service.AuthService.getCurrentUser();
+        if (user != null) {
+            try (PreparedStatement ps = conn.prepareStatement("SET @app_user = ?")) {
+                ps.setString(1, user.getTenDangNhap());
+                ps.executeUpdate();
+            }
+        }
+        return conn;
     }
 
     public static void close() {

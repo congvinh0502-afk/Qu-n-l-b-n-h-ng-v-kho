@@ -34,8 +34,9 @@ public class HoaDonFormController {
     @FXML private TableColumn<ChiTietHD, String> ctColMaSP, ctColTenSP, ctColDonGia, ctColThanh;
     @FXML private TableColumn<ChiTietHD, Integer> ctColSL;
     @FXML private TableColumn<ChiTietHD, Void> ctColXoa;
-    @FXML private Label lblTongTien, lblSauGiam;
-    @FXML private TextField txtGiamGia;
+    @FXML private Label lblTongTien, lblSauGiam, lblConLai;
+    @FXML private TextField txtGiamGia, txtTrNgay;
+    @FXML private ComboBox<String> cboHinhThuc;
     @FXML private Button btnLuu;
 
     private final HoaDonService service   = new HoaDonService();
@@ -65,6 +66,10 @@ public class HoaDonFormController {
             });
             cboKhachHang.getSelectionModel().selectFirst();
         } catch (Exception e) { lblAddError.setText("Lỗi tải KH: " + e.getMessage()); }
+
+        // Payment method options
+        cboHinhThuc.setItems(FXCollections.observableArrayList("Tiền mặt", "Chuyển khoản", "Thẻ"));
+        cboHinhThuc.getSelectionModel().selectFirst();
 
         // Table setup
         ctColMaSP.setCellValueFactory(new PropertyValueFactory<>("maSP"));
@@ -124,6 +129,7 @@ public class HoaDonFormController {
     }
 
     @FXML public void onGiamGiaChanged() { refreshTotal(); }
+    @FXML public void onTrNgayChanged()  { refreshTotal(); }
 
     private void refreshTotal() {
         BigDecimal tong = chiTiet.stream().map(ChiTietHD::getThanhTien).reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -131,6 +137,9 @@ public class HoaDonFormController {
         BigDecimal giam = FormatUtil.parseCurrency(txtGiamGia.getText());
         BigDecimal sau  = tong.subtract(giam.min(tong));
         lblSauGiam.setText(FormatUtil.currency(sau) + " đ");
+        BigDecimal trNgay = FormatUtil.parseCurrency(txtTrNgay.getText());
+        BigDecimal conLai = sau.subtract(trNgay.min(sau));
+        lblConLai.setText(FormatUtil.currency(conLai) + " đ");
     }
 
     @FXML public void onLuu() {
@@ -143,7 +152,10 @@ public class HoaDonFormController {
             if (user != null && user.getNhanVien() != null) hd.setMaNV(user.getNhanVien().getMaNV());
             hd.setGiamGia(FormatUtil.parseCurrency(txtGiamGia.getText()));
             hd.setChiTiet(chiTiet);
-            service.tao(hd);
+
+            BigDecimal trNgay = FormatUtil.parseCurrency(txtTrNgay.getText());
+            String hinhThuc   = cboHinhThuc.getValue();
+            service.tao(hd, trNgay, hinhThuc);
             AlertUtil.info("Thành công", "Đã tạo hóa đơn " + hd.getMaHD());
             goBack("/fxml/banhang/hoa-don.fxml");
         } catch (Exception e) { AlertUtil.error("Lỗi tạo hóa đơn", e.getMessage()); }

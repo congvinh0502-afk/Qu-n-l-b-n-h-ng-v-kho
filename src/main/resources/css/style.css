@@ -475,3 +475,23 @@
     -fx-border-color: #3949ab;
     -fx-border-width: 0 0 0 3;
 }
+
+/* ===================== Bell notification ===================== */
+.btn-bell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 18px;
+    -fx-cursor: hand;
+    -fx-padding: 2 6;
+}
+.btn-bell:hover { -fx-background-color: rgba(255,255,255,0.15); -fx-background-radius: 6; }
+.bell-badge {
+    -fx-background-color: #e53935;
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 1 4;
+    -fx-min-width: 16;
+    -fx-alignment: CENTER;
+}

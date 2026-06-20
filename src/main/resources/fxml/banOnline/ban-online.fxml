@@ -10,8 +10,13 @@
       styleClass="module-root"
       stylesheets="@../../css/style.css">
 
+    <!-- Thẻ nền tảng -->
+    <HBox fx:id="platformCardsArea" spacing="16"
+          style="-fx-padding:12 16 12 16; -fx-background-color:#f8f9fa; -fx-border-color:#e0e0e0; -fx-border-width:0 0 1 0;"/>
+
+    <!-- Toolbar -->
     <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="10">
-        <Label text="Nền tảng:" styleClass="toolbar-label"/>
+        <Label text="Lọc nền tảng:" styleClass="toolbar-label"/>
         <ComboBox fx:id="cboNenTang" prefWidth="160" promptText="Tất cả"/>
         <Button text="Tìm" styleClass="btn-search" onAction="#onFilter"/>
         <Region HBox.hgrow="ALWAYS"/>
@@ -20,20 +25,21 @@
 
     <TableView fx:id="tblDHO" VBox.vgrow="ALWAYS" styleClass="data-table">
         <columns>
-            <TableColumn fx:id="colMaDHO"     text="Mã đơn"            prefWidth="110"/>
-            <TableColumn fx:id="colNenTang"   text="Nền tảng"          prefWidth="110"/>
-            <TableColumn fx:id="colThoiGian"  text="Thời gian"         prefWidth="140"/>
-            <TableColumn fx:id="colMaHD"      text="Hóa đơn"           prefWidth="100"/>
-            <TableColumn fx:id="colTrangThai" text="Trạng thái"        prefWidth="110"/>
-            <TableColumn fx:id="colDiaChi"    text="Địa chỉ giao"      prefWidth="200"/>
-            <TableColumn fx:id="colDonVi"     text="Đơn vị VC"         prefWidth="130"/>
-            <TableColumn fx:id="colTrangThaiGiao" text="Trạng thái VC" prefWidth="140"/>
-            <TableColumn fx:id="colAction"    text="Thao tác"          prefWidth="160"/>
+            <TableColumn fx:id="colMaDHO"         text="Mã đơn"            prefWidth="110"/>
+            <TableColumn fx:id="colNenTang"        text="Nền tảng"          prefWidth="140"/>
+            <TableColumn fx:id="colThoiGian"       text="Thời gian"         prefWidth="135"/>
+            <TableColumn fx:id="colMaHD"           text="Hóa đơn"           prefWidth="95"/>
+            <TableColumn fx:id="colTrangThai"      text="Trạng thái"        prefWidth="100"/>
+            <TableColumn fx:id="colDiaChi"         text="Địa chỉ giao"      prefWidth="190"/>
+            <TableColumn fx:id="colDonVi"          text="Đơn vị VC"         prefWidth="140"/>
+            <TableColumn fx:id="colTrangThaiGiao"  text="Trạng thái VC"     prefWidth="120"/>
+            <TableColumn fx:id="colAction"         text="Thao tác"          prefWidth="130"/>
         </columns>
         <placeholder><Label text="Chưa có đơn hàng online nào"/></placeholder>
     </TableView>
 
     <HBox styleClass="statusbar">
+        <padding><Insets top="6" right="16" bottom="6" left="16"/></padding>
         <Label fx:id="lblCount" styleClass="status-label" text="0 đơn hàng"/>
     </HBox>
 
